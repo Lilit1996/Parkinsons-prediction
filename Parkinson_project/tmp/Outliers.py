@@ -1,16 +1,11 @@
-import sys
-sys.path.append(r'..\configs')
-
-import config
 import pandas as pd
 
-df = pd.read_csv(f"../src/data/{config.data_name}.txt")
+df = pd.read_csv(f"../src/data/parkinsons_data.txt")
 df = df.drop(columns=['name'])
 
 features_with_outliers = ["MDVP:Fhi(Hz)", "MDVP:Jitter(%)", "MDVP:Jitter(Abs)", "MDVP:RAP", "MDVP:PPQ", "Jitter:DDP",
                           "MDVP:Shimmer", "MDVP:Shimmer(dB)", "Shimmer:APQ3", "Shimmer:APQ5", "MDVP:APQ", "Shimmer:DDA",
                           "NHR", "HNR", "D2", "spread1", "spread2", "PPE"]
-
 outlier_indexes = []
 for col in features_with_outliers:
     Q1 =  df[col].quantile(0.25)
@@ -25,5 +20,3 @@ print(len(outlier_indexes))
 
 outliers = df[df.index.isin(outlier_indexes)]
 print(outliers)
-
-#We decided do not delete outliers because data is only 195 (38 outliers).
